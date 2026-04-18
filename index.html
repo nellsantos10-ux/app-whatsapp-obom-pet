@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gráfica Personalizada</title>
+<title>O Bom Pet</title>
 
 <style>
 *{box-sizing:border-box;}
@@ -15,13 +15,11 @@ body{
   color:#fff;
 }
 
-/* HEADER */
 header{
   background:#1c1c1c;
   padding:10px;
   position:sticky;
   top:0;
-  z-index:10;
 }
 
 .top-bar{
@@ -50,7 +48,6 @@ header{
   font-size:12px;
 }
 
-/* ===== BANNER AJUSTADO ===== */
 .banner{
   margin-top:8px;
   height:90px;
@@ -64,7 +61,6 @@ header{
   object-fit:cover;
 }
 
-/* PRODUTOS */
 .grid{
   display:grid;
   grid-template-columns:repeat(2,1fr);
@@ -78,7 +74,6 @@ header{
   padding:10px;
 }
 
-/* IMAGEM PADRÃO */
 .card img{
   width:100%;
   height:120px;
@@ -95,7 +90,6 @@ header{
   margin-top:10px;
 }
 
-/* CARRINHO */
 .cart{
   position:fixed;
   bottom:0;
@@ -138,6 +132,7 @@ header{
   display:flex;
   justify-content:space-between;
   margin-bottom:10px;
+  align-items:center;
 }
 
 .qtd button{
@@ -162,20 +157,19 @@ header{
 <header>
   <div class="top-bar">
     <div class="home-btn" onclick="voltarHome()">🏠</div>
-    <h3>O Bom pet Vargem Grande</h3>
+    <h3>O Bom Pet</h3>
     <div class="cart-btn" onclick="toggleCart()">
       🛒 <span id="count" class="cart-count">0</span>
     </div>
   </div>
 
   <div class="banner">
-    <img src="banner.png">
+    <img src="img/banner.png">
   </div>
 </header>
 
 <div class="grid" id="produtos"></div>
 
-<!-- CARRINHO -->
 <div class="cart" id="cart">
 <div class="cart-content">
 
@@ -234,33 +228,31 @@ header{
 
 <script>
 
-/* ===== 20 PRODUTOS ===== */
 let produtos = [
-{nome:"Golden special adulto frango e carne 15kg 1", preco:159.90, estoque:10, img:"Golden.jpg"},
-{nome:"Produto 2", preco:12, estoque:10, img:"Golden.jpg"},
-{nome:"Produto 3", preco:14, estoque:10, img:"Golden.jpg"},
-{nome:"Produto 4", preco:16, estoque:10, img:"Golden.jpg"},
-{nome:"Produto 5", preco:18, estoque:10, img:"Golden.jpg"},
-{nome:"Produto 6", preco:20, estoque:10, img:"Golden.jpg"},
-{nome:"Produto 7", preco:22, estoque:10, img:"Golden.jpg"},
-{nome:"Produto 8", preco:24, estoque:10, img:"Golden.jpg"},
-{nome:"Produto 9", preco:26, estoque:10, img:"Golden.jpg"},
-{nome:"Produto 10", preco:28, estoque:10, img:"Golden.jpg"},
-{nome:"Produto 11", preco:30, estoque:10, img:"Golden.jpg"},
-{nome:"Produto 12", preco:32, estoque:10, img:"Golden.jpg"},
-{nome:"Produto 13", preco:34, estoque:10, img:"Golden.jpg"},
-{nome:"Produto 14", preco:36, estoque:10, img:"Golden.jpg"},
-{nome:"Produto 15", preco:38, estoque:10, img:"Golden.jpg"},
-{nome:"Produto 16", preco:40, estoque:10, img:"Golden.jpg"},
-{nome:"Produto 17", preco:42, estoque:10, img:"Golden.jpg"},
-{nome:"Produto 18", preco:44, estoque:10, img:"Golden.jpg"},
-{nome:"Produto 19", preco:46, estoque:10, img:"Golden.jpg"},
-{nome:"Produto 20", preco:48, estoque:10, img:"Golden.jpg"}
+{nome:"Produto 1", preco:10, estoque:10, img:"Golden.jpg"},
+{nome:"Produto 2", preco:12, estoque:10, img:"goldensenior.jpg"},
+{nome:"Produto 3", preco:14, estoque:10, img:"premiercarne.jpg"},
+{nome:"Produto 4", preco:16, estoque:10, img:"premierfilhotes.jpg"},
+{nome:"Produto 5", preco:18, estoque:10, img:"sachegato atum.jpg"},
+{nome:"Produto 6", preco:20, estoque:10, img:"goldencastradosalmao.jpg"},
+{nome:"Produto 7", preco:22, estoque:10, img:"img/produto7.png"},
+{nome:"Produto 8", preco:24, estoque:10, img:"img/produto8.png"},
+{nome:"Produto 9", preco:26, estoque:10, img:"img/produto9.png"},
+{nome:"Produto 10", preco:28, estoque:10, img:"img/produto10.png"},
+{nome:"Produto 11", preco:30, estoque:10, img:"img/produto11.png"},
+{nome:"Produto 12", preco:32, estoque:10, img:"img/produto12.png"},
+{nome:"Produto 13", preco:34, estoque:10, img:"img/produto13.png"},
+{nome:"Produto 14", preco:36, estoque:10, img:"img/produto14.png"},
+{nome:"Produto 15", preco:38, estoque:10, img:"img/produto15.png"},
+{nome:"Produto 16", preco:40, estoque:10, img:"img/produto16.png"},
+{nome:"Produto 17", preco:42, estoque:10, img:"img/produto17.png"},
+{nome:"Produto 18", preco:44, estoque:10, img:"img/produto18.png"},
+{nome:"Produto 19", preco:46, estoque:10, img:"img/produto19.png"},
+{nome:"Produto 20", preco:48, estoque:10, img:"img/produto20.png"}
 ];
 
 let carrinho=[];
 
-/* RENDER */
 function renderProdutos(){
 let div=document.getElementById("produtos");
 div.innerHTML="";
@@ -276,7 +268,6 @@ div.innerHTML+=`
 });
 }
 
-/* CPF MÁSCARA */
 document.getElementById("cpf").addEventListener("input", function(e){
 let v = e.target.value.replace(/\D/g,"");
 if(v.length > 11) v = v.slice(0,11);
@@ -286,7 +277,45 @@ v = v.replace(/(\d{3})(\d{1,2})$/,"$1-$2");
 e.target.value = v;
 });
 
-/* RESTANTE DO SISTEMA IGUAL AO SEU */
+function buscarCEP(){
+let cep = document.getElementById("cep").value.replace(/\D/g,'');
+if(cep.length !== 8) return;
+
+fetch(`https://viacep.com.br/ws/${cep}/json/`)
+.then(res=>res.json())
+.then(d=>{
+if(!d.erro){
+document.getElementById("rua").value = d.logradouro;
+}
+});
+}
+
+function verTroco(){
+let p=document.getElementById("pagamento").value;
+document.getElementById("boxTroco").style.display = p==="Dinheiro" ? "block" : "none";
+}
+
+document.getElementById("troco").addEventListener("input", function(e){
+let v = e.target.value.replace(/\D/g,'');
+v = (v/100).toFixed(2)+"";
+v = v.replace(".",",");
+v = v.replace(/\B(?=(\d{3})+(?!\d))/g,".");
+e.target.value = "R$ " + v;
+});
+
+function toggleCPF(){
+let check=document.getElementById("semCpf");
+let cpf=document.getElementById("cpf");
+
+if(check.checked){
+cpf.value="";
+cpf.disabled=true;
+alert("Não informando o CPF você não participará do nosso programa de cashback");
+}else{
+cpf.disabled=false;
+}
+}
+
 function addCarrinho(i){
 let p=produtos[i];
 if(p.estoque<=0){alert("Sem estoque!");return;}
@@ -299,17 +328,72 @@ function atualizar(){
 let lista=document.getElementById("lista");
 let total=0,count=0;
 lista.innerHTML="";
+
 carrinho.forEach((item,i)=>{
 let p=produtos[item.index];
 total+=p.preco*item.qtd;
 count+=item.qtd;
+
 lista.innerHTML+=`
 <div class="item">
-${p.nome} x${item.qtd}
+<div>${p.nome} <br> R$ ${p.preco.toFixed(2)} x ${item.qtd}</div>
+<div class="qtd">
+<button onclick="menos(${i})">-</button>
+<button onclick="mais(${i})">+</button>
+</div>
 </div>`;
 });
+
 document.getElementById("total").innerText="Total: R$ "+total.toFixed(2).replace('.',',');
 document.getElementById("count").innerText=count;
+}
+
+function mais(i){carrinho[i].qtd++;atualizar();}
+function menos(i){carrinho[i].qtd--;if(carrinho[i].qtd<=0)carrinho.splice(i,1);atualizar();}
+
+function finalizarPedido(){
+
+let nome=nomeInput("nome");
+let cpf=nomeInput("cpf");
+let semCpf=document.getElementById("semCpf").checked;
+let rua=nomeInput("rua");
+let numero=nomeInput("numero");
+let ref=nomeInput("referencia");
+let cep=nomeInput("cep");
+let pag=nomeInput("pagamento");
+let troco=nomeInput("troco");
+
+if(!nome||!rua||!numero||!pag){alert("Preencha tudo!");return;}
+if(!semCpf && cpf.length<14){alert("CPF inválido");return;}
+if(carrinho.length===0){alert("Carrinho vazio");return;}
+
+let total=0;
+let msg="🛒 *NOVO PEDIDO*\n\n";
+
+carrinho.forEach(i=>{
+let p=produtos[i.index];
+msg+=`• ${p.nome}\nQtd: ${i.qtd}\nValor: R$ ${p.preco.toFixed(2)}\n\n`;
+total+=p.preco*i.qtd;
+});
+
+msg+=`💰 Total: R$ ${total.toFixed(2)}\n\n`;
+msg+=`👤 Nome: ${nome}\n`;
+
+if(!semCpf) msg+=`CPF: ${cpf}\n`;
+
+msg+=`\n📍 ${rua}, ${numero}\nCEP: ${cep}\nRef: ${ref}\n`;
+msg+=`\n💳 ${pag}\n`;
+
+if(pag==="Dinheiro" && troco){
+msg+=`💵 Troco para: ${troco}\n`;
+}
+
+let url="https://wa.me/5521971724498?text="+encodeURIComponent(msg);
+window.open(url,"_blank");
+}
+
+function nomeInput(id){
+return document.getElementById(id).value;
 }
 
 function toggleCart(){
