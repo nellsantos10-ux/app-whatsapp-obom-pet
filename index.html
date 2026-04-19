@@ -250,7 +250,6 @@ return{subtotal,frete,total:subtotal+frete,msg};
 function addCarrinho(i){
 let p=produtos[i];
 if(p.estoque<=0){alert("Sem estoque!");return;}
-p.estoque--;
 let item=carrinho.find(x=>x.index===i);
 if(item){item.qtd++;}else{carrinho.push({index:i,qtd:1});}
 renderProdutos();
@@ -285,7 +284,6 @@ document.getElementById("count").innerText=count;
 function mais(i){
 let p=produtos[carrinho[i].index];
 if(p.estoque<=0){alert("Sem estoque!");return;}
-p.estoque--;
 carrinho[i].qtd++;
 renderProdutos();
 atualizar();
@@ -293,7 +291,6 @@ atualizar();
 
 function menos(i){
 let p=produtos[carrinho[i].index];
-p.estoque++;
 carrinho[i].qtd--;
 if(carrinho[i].qtd<=0)carrinho.splice(i,1);
 renderProdutos();
@@ -301,6 +298,17 @@ atualizar();
 }
 function nomeInput(id){
   return document.getElementById(id).value.trim();
+}
+
+function baixarEstoque(){
+  carrinho.forEach(item=>{
+    let p = produtos[item.index];
+    p.estoque -= item.qtd;
+
+    if(p.estoque < 0){
+      p.estoque = 0;
+    }
+  });
 }
 /* FINALIZAR */
 function finalizarPedido(){
@@ -340,6 +348,11 @@ msg+=`\n💳 ${pag}\n`;
 if(pag==="Dinheiro" && troco){
 msg+=`💵 Troco para: ${troco}\n`;
 }
+baixarEstoque();
+renderProdutos();
+
+carrinho = [];
+atualizar();
 
 window.open("https://wa.me/5521966388515?text="+encodeURIComponent(msg));
 }
