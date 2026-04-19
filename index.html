@@ -159,6 +159,12 @@ let produtos = [
 {nome:"Produto 20", preco:48, estoque:10, img:"img/produto20.png"}
 ];
 
+let estoqueSalvo = localStorage.getItem("estoqueProdutos");
+
+if(estoqueSalvo){
+  produtos = JSON.parse(estoqueSalvo);
+}
+
 let carrinho=[];
 
 /* CPF máscara */
@@ -300,6 +306,10 @@ function nomeInput(id){
   return document.getElementById(id).value.trim();
 }
 
+function salvarEstoque(){
+  localStorage.setItem("estoqueProdutos", JSON.stringify(produtos));
+}
+
 function baixarEstoque(){
   carrinho.forEach(item=>{
     let p = produtos[item.index];
@@ -309,6 +319,8 @@ function baixarEstoque(){
       p.estoque = 0;
     }
   });
+
+  salvarEstoque(); // 🔥 ESSA LINHA É A IMPORTANTE
 }
 /* FINALIZAR */
 function finalizarPedido(){
