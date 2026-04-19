@@ -7,147 +7,69 @@
 
 <style>
 *{box-sizing:border-box;}
-
-body{
-  margin:0;
-  font-family:Arial;
-  background:#121212;
-  color:#fff;
-}
-
+body{margin:0;font-family:Arial;background:#121212;color:#fff;}
 header{
   background:#1c1c1c;
   padding:10px;
   position:sticky;
   top:0;
+  z-index:1000; /* 🔥 garante que fique na frente */
+}
+.top-bar{display:flex;justify-content:space-between;align-items:center;}
+.home-btn{background:#2a2a2a;padding:6px 10px;border-radius:20px;}
+.cart-btn{background:#e53935;padding:6px 10px;border-radius:20px;}
+.cart-count{background:#fff;color:#e53935;border-radius:50%;padding:2px 6px;font-size:12px;}
+.banner{margin-top:8px;height:90px;overflow:hidden;border-radius:10px;}
+.banner img{width:100%;height:100%;object-fit:cover;}
+
+.info-entrega{
+background:#1f1f1f;
+color:#ff4d4d;
+text-align:center;
+padding:10px;
+font-size:13px;
+border-bottom:1px solid #333;
 }
 
-.top-bar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.home-btn{
-  background:#2a2a2a;
-  padding:6px 10px;
-  border-radius:20px;
-}
-
-.cart-btn{
-  background:#e53935;
-  padding:6px 10px;
-  border-radius:20px;
-}
-
-.cart-count{
-  background:#fff;
-  color:#e53935;
-  border-radius:50%;
-  padding:2px 6px;
-  font-size:12px;
-}
-
-.banner{
-  margin-top:8px;
-  height:90px;
-  overflow:hidden;
-  border-radius:10px;
-}
-
-.banner img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
-  padding:10px;
-}
-
-.card{
-  background:#1e1e1e;
-  border-radius:15px;
-  padding:10px;
-}
-
-.card img{
-  width:100%;
-  height:120px;
-  object-fit:contain;
-  background:#fff;
-  border-radius:10px;
-}
-
-.btn{
-  background:#e53935;
-  padding:10px;
-  text-align:center;
-  border-radius:10px;
-  margin-top:10px;
-}
-
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:10px;}
+.card{background:#1e1e1e;border-radius:15px;padding:10px;}
+.card img{width:100%;height:120px;object-fit:contain;background:#fff;border-radius:10px;}
+.btn{background:#e53935;padding:10px;text-align:center;border-radius:10px;margin-top:10px;}
 .cart{
   position:fixed;
-  bottom:0;
+  top:60px; /* 🔥 não cobre o topo */
   width:100%;
-  height:90vh;
+  height:calc(100vh - 60px);
   background:#181818;
   display:none;
   border-radius:20px 20px 0 0;
   flex-direction:column;
+  z-index:999;
 }
-
 .cart-content{
   overflow:auto;
   padding:15px;
   flex:1;
+  padding-bottom:80px; /* espaço pro botão */
 }
-
-.input-group{
-  margin-top:10px;
-}
-
-.input-group input,
-.input-group select{
-  width:100%;
-  padding:14px;
-  border-radius:12px;
-  border:none;
-  background:#2a2a2a;
-  color:#fff;
-}
-
-.checkbox{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  margin-top:10px;
-}
-
-.item{
-  display:flex;
-  justify-content:space-between;
-  margin-bottom:10px;
-  align-items:center;
-}
-
-.qtd button{
-  background:#e53935;
-  border:none;
-  color:#fff;
-  padding:5px 10px;
-  border-radius:5px;
-}
-
+.input-group{margin-top:10px;}
+.input-group input,.input-group select{width:100%;padding:14px;border-radius:12px;border:none;background:#2a2a2a;color:#fff;}
+.checkbox{display:flex;align-items:center;gap:8px;margin-top:10px;}
+.item{display:flex;justify-content:space-between;margin-bottom:10px;align-items:center;}
+.qtd button{background:#e53935;border:none;color:#fff;padding:5px 10px;border-radius:5px;}
 .finalizar{
   background:#e53935;
   padding:15px;
   text-align:center;
   font-weight:bold;
+  position:sticky;
+  bottom:0;
+  z-index:10;
+}
+ header.carrinho-aberto h3,
+ header.carrinho-aberto .banner,
+ header.carrinho-aberto .info-entrega{
+  display:none;
 }
 </style>
 </head>
@@ -155,17 +77,18 @@ header{
 <body>
 
 <header>
-  <div class="top-bar">
-    <div class="home-btn" onclick="voltarHome()">🏠</div>
-    <h3>O Bom Pet</h3>
-    <div class="cart-btn" onclick="toggleCart()">
-      🛒 <span id="count" class="cart-count">0</span>
-    </div>
-  </div>
+<div class="top-bar">
+<div class="home-btn" onclick="voltarHome()">🏠</div>
+<h3>O Bom Pet</h3>
+<div class="cart-btn" onclick="toggleCart()">🛒 <span id="count" class="cart-count">0</span></div>
+</div>
 
-  <div class="banner">
-    <img src="banner.png">
-  </div>
+<div class="banner"><img src="img/banner.png"></div>
+
+<div class="info-entrega">
+🚚 Entregas a partir de R$30 • Acima de R$50,00 = FRETE GRÁTIS • Taxa R$3,00 Para pedido Abaixo de R$50,00
+</div>
+
 </header>
 
 <div class="grid" id="produtos"></div>
@@ -176,37 +99,22 @@ header{
 <h3>Seu Pedido</h3>
 <div id="lista"></div>
 <div id="total"></div>
+<div id="freteInfo"></div>
 
 <h3>Seus Dados</h3>
 
-<div class="input-group">
-<input id="nome" placeholder="Nome">
-</div>
-
-<div class="input-group">
-<input id="cpf" placeholder="CPF" inputmode="numeric">
-</div>
+<div class="input-group"><input id="nome" placeholder="Nome"></div>
+<div class="input-group"><input id="cpf" placeholder="CPF" inputmode="numeric"></div>
 
 <div class="checkbox">
-<input type="checkbox" id="semCpf" onchange="toggleCPF()">
+<input type="checkbox" id="semCpf">
 <label>Não informar CPF (sem cashback)</label>
 </div>
 
-<div class="input-group">
-<input id="cep" placeholder="CEP" inputmode="numeric" onblur="buscarCEP()">
-</div>
-
-<div class="input-group">
-<input id="rua" placeholder="Rua">
-</div>
-
-<div class="input-group">
-<input id="numero" placeholder="Número" inputmode="numeric">
-</div>
-
-<div class="input-group">
-<input id="referencia" placeholder="Referência">
-</div>
+<div class="input-group"><input id="cep" placeholder="CEP" inputmode="numeric" onblur="buscarCEP()"></div>
+<div class="input-group"><input id="rua" placeholder="Rua"></div>
+<div class="input-group"><input id="numero" placeholder="Número" inputmode="numeric"></div>
+<div class="input-group"><input id="referencia" placeholder="Referência"></div>
 
 <div class="input-group">
 <select id="pagamento" onchange="verTroco()">
@@ -229,12 +137,12 @@ header{
 <script>
 
 let produtos = [
-{nome:"Golden special adulto frango e carne 15kg", preco:159.90, estoque:10, img:"Golden.jpg"},
-{nome:" Golden senior porte pequeno 3kg", preco:59.99, estoque:10, img:"goldensenior.jpg"},
-{nome:"Premier porte pequeno carne e batata doce 15kg", preco:259.90, estoque:10, img:"premiercarne.jpg"},
-{nome:"Premier filhotes porte grande 15Kg", preco:269.90, estoque:10, img:"premierfilhotes.jpg"},
-{nome:"Sachê premier gatos atum 85g", preco:8.99, estoque:10, img:"sachegato atum.jpg"},
-{nome:"Golden gatos castrados salmão 3kg", preco:74.99, estoque:10, img:"goldencastradosalmao.jpg"},
+{nome:"Produto 1", preco:10, estoque:10, img:"img/produto1.png"},
+{nome:"Produto 2", preco:12, estoque:10, img:"img/produto2.png"},
+{nome:"Produto 3", preco:14, estoque:10, img:"img/produto3.png"},
+{nome:"Produto 4", preco:16, estoque:10, img:"img/produto4.png"},
+{nome:"Produto 5", preco:18, estoque:10, img:"img/produto5.png"},
+{nome:"Produto 6", preco:20, estoque:10, img:"img/produto6.png"},
 {nome:"Produto 7", preco:22, estoque:10, img:"img/produto7.png"},
 {nome:"Produto 8", preco:24, estoque:10, img:"img/produto8.png"},
 {nome:"Produto 9", preco:26, estoque:10, img:"img/produto9.png"},
@@ -253,6 +161,211 @@ let produtos = [
 
 let carrinho=[];
 
+/* CPF máscara */
+document.getElementById("cpf").addEventListener("input",function(e){
+let v=e.target.value.replace(/\D/g,"").slice(0,11);
+v=v.replace(/(\d{3})(\d)/,"$1.$2");
+v=v.replace(/(\d{3})(\d)/,"$1.$2");
+v=v.replace(/(\d{3})(\d{1,2})$/,"$1-$2");
+e.target.value=v;
+});
+
+/* VALIDAR CPF */
+function validarCPF(cpf){
+cpf = cpf.replace(/\D/g,'');
+if(cpf.length != 11 || /^(\d)\1+$/.test(cpf)) return false;
+let soma=0;
+for(let i=0;i<9;i++){ soma+=cpf[i]*(10-i); }
+let resto=(soma*10)%11;
+if(resto>=10) resto=0;
+if(resto!=cpf[9]) return false;
+soma=0;
+for(let i=0;i<10;i++){ soma+=cpf[i]*(11-i); }
+resto=(soma*10)%11;
+if(resto>=10) resto=0;
+return resto==cpf[10];
+}
+
+/* CHECKBOX */
+document.getElementById("semCpf").addEventListener("change",function(){
+let cpf=document.getElementById("cpf");
+if(this.checked){
+cpf.value="";
+cpf.disabled=true;
+alert("Não informando o CPF você não participará do nosso programa de cashback");
+}else{
+cpf.disabled=false;
+}
+});
+
+/* TROCO */
+document.getElementById("troco").addEventListener("input",function(e){
+let v=e.target.value.replace(/\D/g,'');
+if(!v) return e.target.value="";
+v=(v/100).toFixed(2);
+v=v.replace(".",",").replace(/\B(?=(\d{3})+(?!\d))/g,".");
+e.target.value="R$ "+v;
+});
+
+/* CEP */
+function buscarCEP(){
+let cep=document.getElementById("cep").value.replace(/\D/g,'');
+if(cep.length!==8)return;
+fetch(`https://viacep.com.br/ws/${cep}/json/`)
+.then(r=>r.json())
+.then(d=>{
+if(!d.erro){
+document.getElementById("rua").value=d.logradouro;
+}
+});
+}
+
+function verTroco(){
+let p=document.getElementById("pagamento").value;
+document.getElementById("boxTroco").style.display=p==="Dinheiro"?"block":"none";
+}
+
+/* FRETE */
+function calcularTotal(){
+let subtotal=0;
+carrinho.forEach(i=>{
+let p=produtos[i.index];
+subtotal+=p.preco*i.qtd;
+});
+let frete=0,msg="";
+if(subtotal < 30){
+  msg = "Pedido mínimo R$30";
+  frete = 0;
+}else if(subtotal >= 30 && subtotal < 50){
+  frete = 3;
+  msg = "Frete: R$ 3,00";
+}else{
+  frete = 0;
+  msg = "Frete grátis acima de R$50";
+}
+return{subtotal,frete,total:subtotal+frete,msg};
+}
+
+/* CARRINHO */
+function addCarrinho(i){
+let p=produtos[i];
+if(p.estoque<=0){alert("Sem estoque!");return;}
+p.estoque--;
+let item=carrinho.find(x=>x.index===i);
+if(item){item.qtd++;}else{carrinho.push({index:i,qtd:1});}
+renderProdutos();
+atualizar();
+}
+
+function atualizar(){
+let lista=document.getElementById("lista");
+let dados=calcularTotal();
+let count=0;
+lista.innerHTML="";
+
+carrinho.forEach((item,i)=>{
+let p=produtos[item.index];
+count+=item.qtd;
+
+lista.innerHTML+=`
+<div class="item">
+<div>${p.nome}<br>R$ ${p.preco.toFixed(2)} x ${item.qtd}</div>
+<div class="qtd">
+<button onclick="menos(${i})">-</button>
+<button onclick="mais(${i})">+</button>
+</div>
+</div>`;
+});
+
+document.getElementById("total").innerText="Total: R$ "+dados.total.toFixed(2).replace('.',',');
+document.getElementById("freteInfo").innerText=dados.msg;
+document.getElementById("count").innerText=count;
+}
+
+function mais(i){
+let p=produtos[carrinho[i].index];
+if(p.estoque<=0){alert("Sem estoque!");return;}
+p.estoque--;
+carrinho[i].qtd++;
+renderProdutos();
+atualizar();
+}
+
+function menos(i){
+let p=produtos[carrinho[i].index];
+p.estoque++;
+carrinho[i].qtd--;
+if(carrinho[i].qtd<=0)carrinho.splice(i,1);
+renderProdutos();
+atualizar();
+}
+function nomeInput(id){
+  return document.getElementById(id).value.trim();
+}
+/* FINALIZAR */
+function finalizarPedido(){
+
+let nome=nomeInput("nome");
+let cpf=nomeInput("cpf");
+let semCpf=document.getElementById("semCpf").checked;
+let rua=nomeInput("rua");
+let numero=nomeInput("numero");
+let ref=nomeInput("referencia");
+let cep=nomeInput("cep");
+let pag=nomeInput("pagamento");
+let troco=nomeInput("troco");
+
+let dados=calcularTotal();
+
+if(carrinho.length===0){alert("Carrinho vazio");return;}
+if(!nome||!rua||!numero||!pag){alert("Preencha tudo!");return;}
+if(dados.subtotal<30){alert("Pedido mínimo R$30");return;}
+if(!semCpf && !validarCPF(cpf)){alert("CPF inválido");return;}
+
+let msg="🛒 *NOVO PEDIDO*\n\n";
+
+carrinho.forEach(i=>{
+let p=produtos[i.index];
+msg+=`• ${p.nome}\nQtd: ${i.qtd}\nValor: R$ ${p.preco.toFixed(2).replace('.',',')}\n\n`;
+});
+
+msg+=`💰 Total: R$ ${dados.total.toFixed(2).replace('.',',')}\n\n`;
+msg+=`👤 Nome: ${nome}\n`;
+
+if(!semCpf) msg+=`CPF: ${cpf}\n`;
+
+msg+=`\n📍 ${rua}, ${numero}\nCEP: ${cep}\nRef: ${ref}\n`;
+msg+=`\n💳 ${pag}\n`;
+
+if(pag==="Dinheiro" && troco){
+msg+=`💵 Troco para: ${troco}\n`;
+}
+
+window.open("https://wa.me/5521966388515?text="+encodeURIComponent(msg));
+}
+/* CONTROLE SCROLL */
+/* CONTROLE SCROLL + HEADER */
+function toggleCart(){
+  let c = document.getElementById("cart");
+  let header = document.querySelector("header");
+
+  if(c.style.display === "flex"){
+    c.style.display = "none";
+    header.classList.remove("carrinho-aberto");
+    document.body.style.overflow = "auto"; // libera scroll
+  }else{
+    c.style.display = "flex";
+    header.classList.add("carrinho-aberto");
+    document.body.style.overflow = "hidden"; // trava scroll
+ }
+}
+
+function voltarHome(){
+  document.getElementById("cart").style.display = "none";
+  document.querySelector("header").classList.remove("carrinho-aberto");
+  document.body.style.overflow = "auto"; // libera scroll
+}
+
 function renderProdutos(){
 let div=document.getElementById("produtos");
 div.innerHTML="";
@@ -266,143 +379,6 @@ div.innerHTML+=`
 <div class="btn" onclick="addCarrinho(${i})">Adicionar</div>
 </div>`;
 });
-}
-
-document.getElementById("cpf").addEventListener("input", function(e){
-let v = e.target.value.replace(/\D/g,"");
-if(v.length > 11) v = v.slice(0,11);
-v = v.replace(/(\d{3})(\d)/,"$1.$2");
-v = v.replace(/(\d{3})(\d)/,"$1.$2");
-v = v.replace(/(\d{3})(\d{1,2})$/,"$1-$2");
-e.target.value = v;
-});
-
-function buscarCEP(){
-let cep = document.getElementById("cep").value.replace(/\D/g,'');
-if(cep.length !== 8) return;
-
-fetch(`https://viacep.com.br/ws/${cep}/json/`)
-.then(res=>res.json())
-.then(d=>{
-if(!d.erro){
-document.getElementById("rua").value = d.logradouro;
-}
-});
-}
-
-function verTroco(){
-let p=document.getElementById("pagamento").value;
-document.getElementById("boxTroco").style.display = p==="Dinheiro" ? "block" : "none";
-}
-
-document.getElementById("troco").addEventListener("input", function(e){
-let v = e.target.value.replace(/\D/g,'');
-v = (v/100).toFixed(2)+"";
-v = v.replace(".",",");
-v = v.replace(/\B(?=(\d{3})+(?!\d))/g,".");
-e.target.value = "R$ " + v;
-});
-
-function toggleCPF(){
-let check=document.getElementById("semCpf");
-let cpf=document.getElementById("cpf");
-
-if(check.checked){
-cpf.value="";
-cpf.disabled=true;
-alert("Não informando o CPF você não participará do nosso programa de cashback");
-}else{
-cpf.disabled=false;
-}
-}
-
-function addCarrinho(i){
-let p=produtos[i];
-if(p.estoque<=0){alert("Sem estoque!");return;}
-let item=carrinho.find(x=>x.index===i);
-if(item){item.qtd++;}else{carrinho.push({index:i,qtd:1});}
-atualizar();
-}
-
-function atualizar(){
-let lista=document.getElementById("lista");
-let total=0,count=0;
-lista.innerHTML="";
-
-carrinho.forEach((item,i)=>{
-let p=produtos[item.index];
-total+=p.preco*item.qtd;
-count+=item.qtd;
-
-lista.innerHTML+=`
-<div class="item">
-<div>${p.nome} <br> R$ ${p.preco.toFixed(2)} x ${item.qtd}</div>
-<div class="qtd">
-<button onclick="menos(${i})">-</button>
-<button onclick="mais(${i})">+</button>
-</div>
-</div>`;
-});
-
-document.getElementById("total").innerText="Total: R$ "+total.toFixed(2).replace('.',',');
-document.getElementById("count").innerText=count;
-}
-
-function mais(i){carrinho[i].qtd++;atualizar();}
-function menos(i){carrinho[i].qtd--;if(carrinho[i].qtd<=0)carrinho.splice(i,1);atualizar();}
-
-function finalizarPedido(){
-
-let nome=nomeInput("nome");
-let cpf=nomeInput("cpf");
-let semCpf=document.getElementById("semCpf").checked;
-let rua=nomeInput("rua");
-let numero=nomeInput("numero");
-let ref=nomeInput("referencia");
-let cep=nomeInput("cep");
-let pag=nomeInput("pagamento");
-let troco=nomeInput("troco");
-
-if(!nome||!rua||!numero||!pag){alert("Preencha tudo!");return;}
-if(!semCpf && cpf.length<14){alert("CPF inválido");return;}
-if(carrinho.length===0){alert("Carrinho vazio");return;}
-
-let total=0;
-let msg="🛒 *NOVO PEDIDO*\n\n";
-
-carrinho.forEach(i=>{
-let p=produtos[i.index];
-msg+=`• ${p.nome}\nQtd: ${i.qtd}\nValor: R$ ${p.preco.toFixed(2)}\n\n`;
-total+=p.preco*i.qtd;
-});
-
-msg+=`💰 Total: R$ ${total.toFixed(2)}\n\n`;
-msg+=`👤 Nome: ${nome}\n`;
-
-if(!semCpf) msg+=`CPF: ${cpf}\n`;
-
-msg+=`\n📍 ${rua}, ${numero}\nCEP: ${cep}\nRef: ${ref}\n`;
-msg+=`\n💳 ${pag}\n`;
-
-if(pag==="Dinheiro" && troco){
-msg+=`💵 Troco para: ${troco}\n`;
-}
-
-let url="https://wa.me/5521971724498?text="+encodeURIComponent(msg);
-window.open(url,"_blank");
-}
-
-function nomeInput(id){
-return document.getElementById(id).value;
-}
-
-function toggleCart(){
-let c=document.getElementById("cart");
-c.style.display=c.style.display==="flex"?"none":"flex";
-}
-
-function voltarHome(){
-document.getElementById("cart").style.display="none";
 }
 
 renderProdutos();
