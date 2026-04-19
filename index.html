@@ -86,7 +86,7 @@ border-bottom:1px solid #333;
 <div class="banner"><img src="img/banner.png"></div>
 
 <div class="info-entrega">
-🚚 Entregas a partir de R$30 • Acima de R$50,00 = FRETE GRÁTIS • Taxa R$3,00 Para pedido Abaixo de R$50,00
+🚚 Entregas a partir de R$30 • Pedidos Acima de R$50,00 = TAXA GRÁTIS • Taxa R$3,00 Para Pedido Abaixo de R$50,00
 </div>
 
 </header>
@@ -244,10 +244,10 @@ if(subtotal < 30){
   frete = 0;
 }else if(subtotal >= 30 && subtotal < 50){
   frete = 3;
-  msg = "Frete: R$ 3,00";
+  msg = "Taxa: R$ 3,00";
 }else{
   frete = 0;
-  msg = "Frete grátis acima de R$50";
+  msg = " Taxa grátis";
 }
 return{subtotal,frete,total:subtotal+frete,msg};
 }
@@ -349,6 +349,8 @@ let p=produtos[i.index];
 msg+=`• ${p.nome}\nQtd: ${i.qtd}\nValor: R$ ${p.preco.toFixed(2).replace('.',',')}\n\n`;
 });
 
+msg+=`📦 Subtotal: R$ ${dados.subtotal.toFixed(2).replace('.',',')}\n`;
+msg+=`🚚 ${dados.msg}\n`;
 msg+=`💰 Total: R$ ${dados.total.toFixed(2).replace('.',',')}\n\n`;
 msg+=`👤 Nome: ${nome}\n`;
 
