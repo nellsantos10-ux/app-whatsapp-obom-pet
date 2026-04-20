@@ -7,6 +7,34 @@
 
 <style>
 
+.categorias{
+  display:flex;
+  gap:10px;
+  padding:10px;
+  overflow:auto;
+}
+
+.cat-btn{
+  background:linear-gradient(135deg,#ff4d4d,#e53935);
+  padding:10px 16px;
+  border-radius:20px;
+  font-size:13px;
+  font-weight:bold;
+  white-space:nowrap;
+  cursor:pointer;
+  box-shadow:0 4px 10px rgba(0,0,0,0.4);
+  transition:0.25s;
+}
+
+.cat-btn:hover{
+  transform:scale(1.08);
+  box-shadow:0 6px 14px rgba(0,0,0,0.6);
+}
+
+.cat-btn:active{
+  transform:scale(0.95);
+}
+
 .banner{
   margin-top:8px;
   border-radius:10px;
@@ -70,10 +98,74 @@ header{
   top:0;
   z-index:1000; /* 🔥 garante que fique na frente */
 }
-.top-bar{display:flex;justify-content:space-between;align-items:center;}
-.home-btn{background:#2a2a2a;padding:6px 10px;border-radius:20px;}
-.cart-btn{background:#e53935;padding:6px 10px;border-radius:20px;}
-.cart-count{background:#fff;color:#e53935;border-radius:50%;padding:2px 6px;font-size:12px;}
+.top-bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.top-bar h3{
+  flex:1;
+  text-align:center;
+  margin:0;
+  font-size:18px;
+}
+.home-btn, .cart-btn{
+  width:44px;
+  height:44px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:14px;
+  cursor:pointer;
+  transition:0.25s;
+  box-shadow:0 4px 12px rgba(0,0,0,0.5);
+}
+
+/* HOME mais discreto */
+.home-btn{
+  background:linear-gradient(135deg,#2b2b2b,#3a3a3a);
+}
+
+/* CARRINHO mais chamativo 🔥 */
+.cart-btn{
+  background:linear-gradient(135deg,#ff4d4d,#e53935);
+  position:relative;
+}
+
+/* Ícones */
+.home-btn svg,
+.cart-btn svg{
+  width:20px;
+  height:20px;
+}
+
+/* Hover */
+.home-btn:hover,
+.cart-btn:hover{
+  transform:scale(1.1);
+}
+
+/* Clique */
+.home-btn:active,
+.cart-btn:active{
+  transform:scale(0.92);
+}
+
+/* contador mais bonito */
+.cart-count{
+  position:absolute;
+  top:-6px;
+  right:-6px;
+  background:#fff;
+  color:#e53935;
+  border-radius:50%;
+  padding:4px 7px;
+  font-size:11px;
+  font-weight:bold;
+  box-shadow:0 2px 6px rgba(0,0,0,0.4);
+}
 .banner{
   margin-top:8px;
   border-radius:10px;
@@ -101,9 +193,9 @@ border-bottom:1px solid #333;
 .btn{background:#e53935;padding:10px;text-align:center;border-radius:10px;margin-top:10px;}
 .cart{
   position:fixed;
-  top:60px; /* 🔥 não cobre o topo */
+  top:0;
   width:100%;
-  height:calc(100vh - 60px);
+  height:100vh;
   background:#181818;
   display:none;
   border-radius:20px 20px 0 0;
@@ -113,8 +205,9 @@ border-bottom:1px solid #333;
 .cart-content{
   overflow:auto;
   padding:15px;
+  padding-top:100px; /* 🔥 espaço do topo */
   flex:1;
-  padding-bottom:80px; /* espaço pro botão */
+  padding-bottom:100px; /* botão finalizar */
 }
 .input-group{margin-top:10px;}
 .input-group input,.input-group select{width:100%;padding:14px;border-radius:12px;border:none;background:#2a2a2a;color:#fff;}
@@ -154,12 +247,27 @@ header.carrinho-aberto .categorias {
 <body>
 
 <header>
+
 <div class="top-bar">
-<div class="home-btn" onclick="voltarHome()">🏠</div>
-<h3>O Bom Pet</h3>
-<div class="cart-btn" onclick="toggleCart()">🛒 <span id="count" class="cart-count">0</span></div>
+  <div class="home-btn" onclick="voltarHome()">
+    <svg viewBox="0 0 24 24" fill="none">
+      <path d="M3 10L12 3L21 10V20C21 20.55 20.55 21 20 21H14V14H10V21H4C3.45 21 3 20.55 3 20V10Z" fill="white"/>
+    </svg>
+  </div>
+
+  <h3>O Bom Pet</h3>
+
+  <div class="cart-btn" onclick="toggleCart()">
+    <svg viewBox="0 0 24 24" fill="none">
+      <path d="M6 6h15l-1.5 9h-12z" stroke="white" stroke-width="2"/>
+      <circle cx="9" cy="20" r="1.5" fill="white"/>
+      <circle cx="18" cy="20" r="1.5" fill="white"/>
+    </svg>
+    <span id="count" class="cart-count">0</span>
+  </div>
 </div>
 
+<!-- BANNER -->
 <div class="banner">
   <div class="carousel" id="carousel">
     <img src="1.png">
@@ -168,25 +276,33 @@ header.carrinho-aberto .categorias {
   </div>
 </div>
 
+<!-- INFO -->
 <div class="info-entrega">
 🚚 Entregas a partir de R$30 • Pedidos Acima de R$50,00 = TAXA GRÁTIS • Taxa R$3,00 Para Pedido Abaixo de R$50,00
 </div>
+
+<!-- BOTÃO WHATS -->
 <div style="padding:10px;">
-  <div style="padding:10px;">
   <div class="btn-whatsapp" onclick="atendimentoWhats()">
     <span class="icon">
-  <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" width="18">
-</span>
+      <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" width="18">
+    </span>
     Não encontrou o produto? Fale no WhatsApp
   </div>
 </div>
+
+<!-- CATEGORIAS -->
+<div class="categorias">
+  <div class="cat-btn" onclick="trocarCategoria('racoes')">🐶 Rações</div>
+  <div class="cat-btn" onclick="trocarCategoria('gatos')">🐱 Gatos</div>
+  <div class="cat-btn" onclick="trocarCategoria('petiscos')">🦴 Petiscos</div>
+  <div class="cat-btn" onclick="trocarCategoria('gatos')">🐱 Gatos</div>
+  <div class="cat-btn" onclick="trocarCategoria('petiscos')">🦴 Petiscos</div>
+  <div class="cat-btn" onclick="trocarCategoria('gatos')">🐱 Gatos</div>
+  <div class="cat-btn" onclick="trocarCategoria('petiscos')">🦴 Petiscos</div>
 </div>
 
-<div class="categorias" style="display:flex;gap:10px;padding:10px;overflow:auto;">
-  <div class="btn" onclick="trocarCategoria('racoes')">Rações</div>
-  <div class="btn" onclick="trocarCategoria('gatos')">Gatos</div>
-  <div class="btn" onclick="trocarCategoria('petiscos')">Petiscos</div>
-</div>
+</header>
 
 </header>
 
@@ -563,7 +679,7 @@ function toggleCart(){
     c.style.display = "flex";
     header.classList.add("carrinho-aberto");
     document.body.style.overflow = "hidden"; // trava scroll
- }
+  }
 }
 
 function voltarHome(){
