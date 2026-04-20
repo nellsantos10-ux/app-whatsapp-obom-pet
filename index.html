@@ -319,6 +319,7 @@ Produto adicionado!
 
 <!-- CATEGORIAS -->
 <div class="categorias">
+  <div class="cat-btn" onclick="trocarCategoria('combos')">🐶 Nossos Combos</div>
   <div class="cat-btn" onclick="trocarCategoria('racoes')">🐶 Rações</div>
   <div class="cat-btn" onclick="trocarCategoria('gatos')">🐱 Gatos</div>
   <div class="cat-btn" onclick="trocarCategoria('petiscos')">🦴 Petiscos</div>
@@ -440,8 +441,12 @@ function trocarCategoria(cat){
 }
 
 let categorias = {
+combos: [
+  { nome: "Golden gatos castrados salmão 3kg", preco: 64.90, estoque: 16, img: "goldencastradosalmao.jpg" },
+  { nome: "Premier gatos sachê atum 85g", preco: 8.99, estoque: 120, img: "sachegato atum.jpg" },
+],
   racoes: [
-    {nome:"Golden special adulto frango e carne 15kg", preco:159.90, estoque:15, img:"Golden.jpg"},
+    {nome:"Golden special adulto frango e carne 15kg", preco:159.90, estoque:150, img:"Golden.jpg"},
     {nome:"Golden senior porte pequeno 3kg", preco:64.99, estoque:10, img:"goldensenior.jpg"},
     {nome:"Premier filhotes porte grande 15kg", preco:269.90, estoque:10, img:"premierfilhotes.jpg"},
     {nome:"Premier porte pequeno carne/batata doce 15kg", preco:259.90, estoque:10, img:"premiercarne.jpg"},
@@ -495,25 +500,29 @@ let categorias = {
 let dadosSalvos = localStorage.getItem("produtos");
 
 if(dadosSalvos){
-  categorias = JSON.parse(dadosSalvos);
-}
-{
-  try{
-    let dados = JSON.parse(estoqueSalvo);
+  let dados = JSON.parse(dadosSalvos);
 
-    // 🔥 só atualiza estoque, não nome/preço
-    Object.keys(categorias).forEach(cat=>{
-      categorias[cat].forEach((produto, i)=>{
-        if(dados[cat] && dados[cat][i]){
-          produto.estoque = dados[cat][i].estoque;
-        }
-      });
+  // 🔥 MESCLA os dados salvos com o código novo
+  Object.keys(categorias).forEach(cat => {
+
+    if(!dados[cat]){
+      dados[cat] = categorias[cat];
+    }
+
+    categorias[cat].forEach((produtoNovo, i) => {
+
+      if(dados[cat][i]){
+        // 🔥 mantém estoque salvo
+        produtoNovo.estoque = dados[cat][i].estoque;
+      }
+
     });
 
-  }catch(e){
-    localStorage.removeItem("estoqueProdutos");
-  }
+  });
+
+  categorias = dados;
 }
+
 let carrinho=[];
 
 /* CPF máscara */
