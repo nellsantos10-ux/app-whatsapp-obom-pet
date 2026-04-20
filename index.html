@@ -113,11 +113,21 @@ header{
   gap:10px;
 }
 
-.top-bar h3{
-  flex:1;
-  text-align:center;
-  margin:0;
-  font-size:18px;
+.top-bar h3 {
+  flex: 1;
+  text-align: center;
+  margin: 0;
+  font-size: 20px;
+  font-weight: bold;
+  color: #fff;
+  
+  background: linear-gradient(135deg, #ff4d4d, #b71c1c);
+  padding: 8px 12px;
+  border-radius: 12px;
+  
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 .home-btn, .cart-btn{
   width:44px;
@@ -389,7 +399,27 @@ padding:20px;
 font-family:Arial;
 ">
 
-<h2 style="text-align:center;">⚙️ Painel Admin</h2>
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:10px;
+">
+
+<h2 style="margin:0;">⚙️ Painel Admin</h2>
+
+<button onclick="fecharAdmin()" style="
+padding:8px 12px;
+background:#e53935;
+color:#fff;
+border:none;
+border-radius:8px;
+font-weight:bold;
+">
+✖ Fechar
+</button>
+
+</div>
 
 <select id="adminCategoria" style="width:100%;padding:10px;border-radius:10px;margin-bottom:10px;"></select>
 
@@ -411,19 +441,66 @@ border-radius:10px;
 font-weight:bold;
 ">Adicionar Produto</button>
 
-<h3 style="margin-top:20px;">Produtos</h3>
-<div id="adminLista"></div>
-
-<button onclick="fecharAdmin()" style="
-margin-top:20px;
+<button onclick="toggleLogs()" style="
 width:100%;
 padding:12px;
-background:#333;
+background:#2196F3;
 color:#fff;
 border:none;
 border-radius:10px;
-">Fechar</button>
+font-weight:bold;
+margin-top:20px;
+">
+📦 Ver Pedidos Finalizados
+</button>
 
+<div id="areaLogs" style="
+display:none;
+margin-top:15px;
+background:#1a1a1a;
+padding:10px;
+border-radius:12px;
+">
+
+  <button onclick="exportarCSV()" style="
+  width:100%;
+  padding:10px;
+  background:#4CAF50;
+  border:none;
+  border-radius:10px;
+  color:#fff;
+  margin-bottom:10px;">
+  📊 Exportar Excel
+  </button>
+
+  <button onclick="exportarPDF()" style="
+  width:100%;
+  padding:10px;
+  background:#ff9800;
+  border:none;
+  border-radius:10px;
+  color:#fff;
+  margin-bottom:10px;">
+  📄 Exportar PDF
+  </button>
+
+  <button onclick="apagarLogs()" style="
+  width:100%;
+  padding:10px;
+  background:#f44336;
+  border:none;
+  border-radius:10px;
+  color:#fff;
+  margin-bottom:10px;">
+  🗑️ Apagar Histórico
+  </button>
+
+  <div id="logPedidos"></div>
+
+</div>  
+
+<h3 style="margin-top:20px;">Produtos</h3>
+<div id="adminLista"></div>
 </div>
 <script>
 
@@ -746,7 +823,7 @@ msg+=`💵 Troco para: ${troco}\n`;
 }
 baixarEstoque();
 renderProdutos();
-
+salvarLogPedido(msg);
 carrinho = [];
 atualizar();
 
@@ -848,6 +925,7 @@ function abrirPainelAdmin(){
   document.getElementById("adminPanel").style.display = "block";
   carregarCategoriasAdmin();
   renderAdmin();
+  renderLogs();
 }
 
 function fecharAdmin(){
@@ -1062,6 +1140,117 @@ function mostrarToast(msg, cor="#4CAF50"){
   setTimeout(()=>{
     toast.style.opacity = "0";
   }, 2000);
+}
+
+function salvarLogPedido(pedido){
+  let logs = JSON.parse(localStorage.getItem("logsPedidos")) || [];
+
+  logs.push({
+    data: new Date().toLocaleString(),
+    pedido: pedido
+  });
+
+  localStorage.setItem("logsPedidos", JSON.stringify(logs));
+}
+
+function renderLogs(){
+  let div = document.getElementById("logPedidos");
+  let logs = JSON.parse(localStorage.getItem("logsPedidos")) || [];
+
+  div.innerHTML = "";
+
+  logs.reverse().forEach(l => {
+    div.innerHTML += `
+    <div style="
+      background:#1e1e1e;
+      padding:10px;
+      border-radius:10px;
+      margin-bottom:10px;
+      font-size:12px;
+      white-space:pre-line;
+    ">
+      <b>${l.data}</b><br><br>
+      ${l.pedido}
+    </div>
+    `;
+  });
+}
+
+function toggleLogs(){
+  let area = document.getElementById("areaLogs");
+
+  if(area.style.display === "none"){
+    area.style.display = "block";
+    renderLogs();
+  }else{
+    area.style.display = "none";
+  }
+}
+
+function apagarLogs(){
+  if(confirm("Tem certeza que deseja apagar todos os pedidos?")){
+    localStorage.removeItem("logsPedidos");
+    renderLogs();
+    alert("Histórico apagado!");
+  }
+}
+
+function exportarCSV(){
+  let logs = JSON.parse(localStorage.getItem("logsPedidos")) || [];
+
+  if(logs.length === 0){
+    alert("Sem pedidos!");
+    return;
+  }
+
+  let csv = "Data;Pedido\n";
+
+  logs.forEach(l=>{
+    let pedido = l.pedido.replace(/\n/g," ").replace(/;/g,",");
+    csv += `${l.data};${pedido}\n`;
+  });
+
+  let blob = new Blob([csv], { type: "text/csv" });
+  let url = URL.createObjectURL(blob);
+
+  let a = document.createElement("a");
+  a.href = url;
+  a.download = "pedidos.csv";
+  a.click();
+}
+
+function exportarPDF(){
+  let logs = JSON.parse(localStorage.getItem("logsPedidos")) || [];
+
+  if(logs.length === 0){
+    alert("Sem pedidos!");
+    return;
+  }
+
+  let conteudo = "";
+
+  logs.forEach(l=>{
+    conteudo += `Data: ${l.data}\n`;
+    conteudo += `${l.pedido}\n`;
+    conteudo += "-----------------------------\n";
+  });
+
+  let janela = window.open("", "_blank");
+
+  janela.document.write(`
+    <html>
+      <head>
+        <title>Relatório de Pedidos</title>
+      </head>
+      <body style="font-family:Arial; white-space:pre-line;">
+        <h2>Relatório de Pedidos - O Bom Pet</h2>
+        ${conteudo}
+      </body>
+    </html>
+  `);
+
+  janela.document.close();
+  janela.print();
 }
 </script>
 
