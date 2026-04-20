@@ -7,6 +7,14 @@
 
 <style>
 
+input[type="file"]{
+  background:#2a2a2a;
+  padding:10px;
+  border-radius:10px;
+  color:#fff;
+  width:100%;
+}
+
 .categorias{
   display:flex;
   gap:10px;
@@ -246,6 +254,24 @@ header.carrinho-aberto .categorias {
 
 <body>
 
+<div id="toast" style="
+position:fixed;
+bottom:20px;
+left:50%;
+transform:translateX(-50%);
+background:#4CAF50;
+color:#fff;
+padding:12px 20px;
+border-radius:10px;
+font-weight:bold;
+opacity:0;
+pointer-events:none;
+transition:0.4s;
+z-index:3000;
+">
+Produto adicionado!
+</div>
+
 <header>
 
 <div class="top-bar">
@@ -348,7 +374,56 @@ header.carrinho-aberto .categorias {
 
 <div class="finalizar" onclick="finalizarPedido()">Finalizar Pedido</div>
 </div>
+<div id="adminPanel" style="
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#121212;
+z-index:2000;
+display:none;
+overflow:auto;
+padding:20px;
+font-family:Arial;
+">
 
+<h2 style="text-align:center;">⚙️ Painel Admin</h2>
+
+<select id="adminCategoria" style="width:100%;padding:10px;border-radius:10px;margin-bottom:10px;"></select>
+
+<h3>Adicionar Produto</h3>
+
+<input id="adminNome" placeholder="Nome" style="width:100%;padding:12px;border-radius:10px;margin-bottom:8px;">
+<input id="adminPreco" placeholder="Preço" style="width:100%;padding:12px;border-radius:10px;margin-bottom:8px;">
+<input id="adminEstoque" placeholder="Estoque" style="width:100%;padding:12px;border-radius:10px;margin-bottom:8px;">
+
+<input type="file" id="adminImgFile" accept="image/*" style="margin-bottom:10px;">
+
+<button onclick="addProdutoAdmin()" style="
+width:100%;
+padding:12px;
+background:#e53935;
+color:#fff;
+border:none;
+border-radius:10px;
+font-weight:bold;
+">Adicionar Produto</button>
+
+<h3 style="margin-top:20px;">Produtos</h3>
+<div id="adminLista"></div>
+
+<button onclick="fecharAdmin()" style="
+margin-top:20px;
+width:100%;
+padding:12px;
+background:#333;
+color:#fff;
+border:none;
+border-radius:10px;
+">Fechar</button>
+
+</div>
 <script>
 
 function atendimentoWhats(){
@@ -417,9 +492,12 @@ let categorias = {
   ]
 };
 
-let estoqueSalvo = localStorage.getItem("estoqueProdutos");
+let dadosSalvos = localStorage.getItem("produtos");
 
-if(estoqueSalvo){
+if(dadosSalvos){
+  categorias = JSON.parse(dadosSalvos);
+}
+{
   try{
     let dados = JSON.parse(estoqueSalvo);
 
@@ -599,8 +677,8 @@ function nomeInput(id){
   return document.getElementById(id).value.trim();
 }
 
-function salvarEstoque(){
-  localStorage.setItem("estoqueProdutos", JSON.stringify(categorias));
+function salvarProdutos(){
+  localStorage.setItem("produtos", JSON.stringify(categorias));
 }
 
 function baixarEstoque(){
@@ -615,7 +693,7 @@ if(p.estoque < 0){
 });
 
 
-  salvarEstoque(); // 🔥 ESSA LINHA É A IMPORTANTE
+  salvarProdutos(); // 🔥 ESSA LINHA É A IMPORTANTE
 }
 /* FINALIZAR */
 function finalizarPedido(){
@@ -720,6 +798,262 @@ setInterval(() => {
   carousel.style.transform = `translateX(-${index * 100}%)`;
 }, 3000); // troca a cada 3 segundos
 
+let pressTimer;
+const homeBtn = document.querySelector(".home-btn");
+
+// MOBILE
+homeBtn.addEventListener("touchstart", startPress);
+homeBtn.addEventListener("touchend", cancelPress);
+homeBtn.addEventListener("touchmove", cancelPress);
+
+// PC
+homeBtn.addEventListener("mousedown", startPress);
+homeBtn.addEventListener("mouseup", cancelPress);
+homeBtn.addEventListener("mouseleave", cancelPress);
+
+function startPress(){
+  pressTimer = setTimeout(() => {
+    abrirLoginAdmin();
+  }, 1200);
+}
+
+function cancelPress(){
+  clearTimeout(pressTimer);
+}
+
+document.querySelector(".home-btn").addEventListener("mouseup", function(){
+  clearTimeout(pressTimer);
+});
+
+function abrirLoginAdmin(){
+  let senha = prompt("Digite a senha do administrador:");
+
+  if(senha === "####"){
+    abrirPainelAdmin();
+  }else{
+    alert("Senha incorreta!");
+  }
+}
+
+function abrirPainelAdmin(){
+  document.getElementById("adminPanel").style.display = "block";
+  carregarCategoriasAdmin();
+  renderAdmin();
+}
+
+function fecharAdmin(){
+  document.getElementById("adminPanel").style.display = "none";
+}
+
+function carregarCategoriasAdmin(){
+  let select = document.getElementById("adminCategoria");
+  select.innerHTML = "";
+
+  Object.keys(categorias).forEach(cat=>{
+    select.innerHTML += `<option value="${cat}">${cat}</option>`;
+  });
+
+  select.onchange = renderAdmin;
+}
+
+function addProdutoAdmin(){
+  let cat = document.getElementById("adminCategoria").value;
+
+  let nome = document.getElementById("adminNome").value;
+  let preco = parseFloat(document.getElementById("adminPreco").value);
+  let estoque = parseInt(document.getElementById("adminEstoque").value);
+  let file = document.getElementById("adminImgFile").files[0];
+
+  if(!nome || !preco || !estoque){
+    alert("Preencha tudo!");
+    return;
+  }
+
+  if(file){
+    let reader = new FileReader();
+
+    reader.onload = function(e){
+      let imgBase64 = e.target.result;
+
+      categorias[cat].push({
+        nome,
+        preco,
+        estoque,
+        img: imgBase64
+      });
+
+      salvarProdutos();
+      renderAdmin();
+      renderProdutos();
+      mostrarToast("Produto adicionado com sucesso ✅");
+    }
+
+    reader.readAsDataURL(file);
+
+  }else{
+    alert("Selecione uma imagem!");
+  }
+}
+
+function removerProduto(cat, index){
+  if(confirm("Remover produto?")){
+    categorias[cat].splice(index,1);
+
+    salvarProdutos();
+    renderAdmin();
+    renderProdutos();
+    mostrarToast("Produto removido 🗑️", "#f44336");
+  }
+}
+
+function alterarEstoque(cat, index, valor){
+  categorias[cat][index].estoque = parseInt(valor);
+
+  salvarProdutos();
+  renderAdmin();
+  renderProdutos();
+}
+
+function renderAdmin(){
+  let cat = document.getElementById("adminCategoria").value;
+  let div = document.getElementById("adminLista");
+
+  div.innerHTML = "";
+
+  categorias[cat].forEach((p,i)=>{
+    div.innerHTML += `
+    <div style="
+      background:#1e1e1e;
+      padding:15px;
+      border-radius:15px;
+      margin-bottom:15px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.5);
+    ">
+
+      <img src="${p.img}" style="
+        width:100%;
+        height:140px;
+        object-fit:contain;
+        background:#fff;
+        border-radius:10px;
+      "><br><br>
+
+      <input value="${p.nome}" id="nome_${i}" placeholder="Nome"
+      style="width:100%;padding:10px;border-radius:10px;margin-bottom:8px;">
+
+      <input value="${p.preco}" id="preco_${i}" placeholder="Preço"
+      style="width:100%;padding:10px;border-radius:10px;margin-bottom:8px;">
+
+      <input value="${p.estoque}" id="estoque_${i}" placeholder="Estoque"
+      style="width:100%;padding:10px;border-radius:10px;margin-bottom:8px;">
+
+      <input type="file" id="img_${i}" accept="image/*" style="margin-bottom:10px;">
+
+      <button onclick="salvarProduto('${cat}',${i})" style="
+        width:100%;
+        padding:10px;
+        background:#4CAF50;
+        border:none;
+        border-radius:10px;
+        color:#fff;
+        font-weight:bold;
+        margin-bottom:8px;
+      ">Salvar Alterações</button>
+
+      <button onclick="removerProduto('${cat}',${i})" style="
+        width:100%;
+        padding:10px;
+        background:#ff4d4d;
+        border:none;
+        border-radius:10px;
+        color:#fff;
+      ">Remover</button>
+
+    </div>
+    `;
+  });
+}
+
+function editarProduto(cat, index, campo, valor){
+  if(campo === "preco" || campo === "estoque"){
+    valor = Number(valor);
+  }
+
+  categorias[cat][index][campo] = valor;
+
+  salvarProdutos();
+  renderProdutos();
+}
+
+function atualizarProduto(cat, index){
+  let nome = document.getElementById(`nome_${index}`).value;
+  let preco = parseFloat(document.getElementById(`preco_${index}`).value);
+  let estoque = parseInt(document.getElementById(`estoque_${index}`).value);
+
+  categorias[cat][index] = {
+    ...categorias[cat][index],
+    nome,
+    preco,
+    estoque
+  };
+
+  salvarProdutos();
+  renderAdmin();
+  renderProdutos();
+
+  alert("Produto atualizado!");
+}
+
+function salvarProduto(cat, index){
+  let nome = document.getElementById(`nome_${index}`).value;
+  let preco = parseFloat(document.getElementById(`preco_${index}`).value);
+  let estoque = parseInt(document.getElementById(`estoque_${index}`).value);
+  let file = document.getElementById(`img_${index}`).files[0];
+
+  if(!nome || !preco || !estoque){
+    alert("Preencha tudo!");
+    return;
+  }
+
+  // Atualiza dados
+  categorias[cat][index].nome = nome;
+  categorias[cat][index].preco = preco;
+  categorias[cat][index].estoque = estoque;
+
+  // 🔥 Se tiver nova imagem
+  if(file){
+    let reader = new FileReader();
+
+    reader.onload = function(e){
+      categorias[cat][index].img = e.target.result;
+
+      salvarProdutos(); // ✅ CORRETO
+      renderAdmin();
+      renderProdutos();
+      mostrarToast("Produto atualizado com sucesso ✅", "#2196F3");
+    }
+
+    reader.readAsDataURL(file);
+
+  }else{
+    salvarProdutos(); // ✅ CORRETO
+    renderAdmin();
+    renderProdutos();
+    mostrarToast("Produto atualizado com sucesso ✅", "#2196F3"); // 🔥 faltava isso aqui
+  }
+}
+
+function mostrarToast(msg, cor="#4CAF50"){
+  let toast = document.getElementById("toast");
+
+  toast.innerText = msg;
+  toast.style.background = cor;
+  toast.style.opacity = "1";
+
+  setTimeout(()=>{
+    toast.style.opacity = "0";
+  }, 2000);
+}
 </script>
 
 </body>
