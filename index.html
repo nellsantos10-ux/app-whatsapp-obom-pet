@@ -13,7 +13,7 @@ header{
   padding:10px;
   position:sticky;
   top:0;
-  /* z-index:1000; /* 🔥 garante que fique na frente  */
+  z-index:1000; /* 🔥 garante que fique na frente */
 }
 .top-bar{display:flex;justify-content:space-between;align-items:center;}
 .home-btn{background:#2a2a2a;padding:6px 10px;border-radius:20px;}
@@ -89,6 +89,12 @@ border-bottom:1px solid #333;
 🚚 Entregas a partir de R$30 • Pedidos Acima de R$50,00 = TAXA GRÁTIS • Taxa R$3,00 Para Pedido Abaixo de R$50,00
 </div>
 
+<div style="display:flex;gap:10px;padding:10px;overflow:auto;">
+  <div class="btn" onclick="trocarCategoria('racoes')">Rações</div>
+  <div class="btn" onclick="trocarCategoria('gatos')">Gatos</div>
+  <div class="btn" onclick="trocarCategoria('petiscos')">Petiscos</div>
+</div>
+
 </header>
 
 <div class="grid" id="produtos"></div>
@@ -136,35 +142,85 @@ border-bottom:1px solid #333;
 
 <script>
 
-let produtos = [
-{nome:"Golden special adulto frango e carne 15kg", preco:159.90, estoque:10, img:"Golden.jpg"},
-{nome:"Golden senior porte pequeno 3kg", preco:12, estoque:59.99, img:"goldensenior.jpg"},
-{nome:"Premier filhotes porte grande 15kg", preco:269.90, estoque:10, img:"premierfilhotes.jpg"},
-{nome:"Premier porte pequeno carne/batata doce 15kg", preco:259.90, estoque:10, img:"premiercarne.jpg"},
-{nome:"Golden gatos castrados salmão 3kg", preco:64.99, estoque:10, img:"goldencastradosalmao.jpg"},
-{nome:"Premier gatos sachê atum 85g", preco:20, estoque:10, img:"sachegato atum.jpg"},
-{nome:"Produto 7", preco:22, estoque:10, img:"img/produto7.png"},
-{nome:"Produto 8", preco:24, estoque:10, img:"img/produto8.png"},
-{nome:"Produto 9", preco:26, estoque:10, img:"img/produto9.png"},
-{nome:"Produto 10", preco:28, estoque:10, img:"img/produto10.png"},
-{nome:"Produto 11", preco:30, estoque:10, img:"img/produto11.png"},
-{nome:"Produto 12", preco:32, estoque:10, img:"img/produto12.png"},
-{nome:"Produto 13", preco:34, estoque:10, img:"img/produto13.png"},
-{nome:"Produto 14", preco:36, estoque:10, img:"img/produto14.png"},
-{nome:"Produto 15", preco:38, estoque:10, img:"img/produto15.png"},
-{nome:"Produto 16", preco:40, estoque:10, img:"img/produto16.png"},
-{nome:"Produto 17", preco:42, estoque:10, img:"img/produto17.png"},
-{nome:"Produto 18", preco:44, estoque:10, img:"img/produto18.png"},
-{nome:"Produto 19", preco:46, estoque:10, img:"img/produto19.png"},
-{nome:"Produto 20", preco:48, estoque:10, img:"img/produto20.png"}
-];
+let categoriaAtual = "racoes";
+
+function trocarCategoria(cat){
+  categoriaAtual = cat;
+  renderProdutos();
+}
+
+let categorias = {
+  racoes: [
+    {nome:"Golden special adulto frango e carne 15kg", preco:159.90, estoque:15, img:"Golden.jpg"},
+    {nome:"Golden senior porte pequeno 3kg", preco:64.99, estoque:10, img:"goldensenior.jpg"},
+    {nome:"Premier filhotes porte grande 15kg", preco:269.90, estoque:10, img:"premierfilhotes.jpg"},
+    {nome:"Premier porte pequeno carne/batata doce 15kg", preco:259.90, estoque:10, img:"premiercarne.jpg"},
+    {nome:"Ração 5", preco:18, estoque:10, img:"img/p5.png"},
+    {nome:"Ração 6", preco:20, estoque:10, img:"img/p6.png"},
+    {nome:"Ração 7", preco:22, estoque:10, img:"img/p7.png"},
+    {nome:"Ração 8", preco:24, estoque:10, img:"img/p8.png"},
+    {nome:"Ração 9", preco:26, estoque:10, img:"img/p9.png"},
+    {nome:"Ração 10", preco:28, estoque:10, img:"img/p10.png"},
+    {nome:"Ração 11", preco:30, estoque:10, img:"img/p11.png"},
+    {nome:"Ração 12", preco:32, estoque:10, img:"img/p12.png"},
+    {nome:"Ração 13", preco:34, estoque:10, img:"img/p13.png"},
+    {nome:"Ração 14", preco:36, estoque:10, img:"img/p14.png"},
+    {nome:"Ração 15", preco:38, estoque:10, img:"img/p15.png"},
+    {nome:"Ração 16", preco:40, estoque:10, img:"img/p16.png"},
+    {nome:"Ração 17", preco:42, estoque:10, img:"img/p17.png"},
+    {nome:"Ração 18", preco:44, estoque:10, img:"img/p18.png"},
+    {nome:"Ração 19", preco:46, estoque:10, img:"img/p19.png"},
+    {nome:"Ração 20", preco:48, estoque:10, img:"img/p20.png"}
+  ],
+
+  gatos: [
+    {nome:"Golden gatos castrados salmão 3kg", preco:64.90, estoque:16, img:"goldencastradosalmao.jpg"},
+    {nome:"Premier gatos sachê atum 85g", preco:8.99, estoque:120, img:"sachegato atum.jpg"},
+  ],
+
+  petiscos: [
+    {nome:"Petisco 1", preco:5, estoque:10, img:"img/p1.png"},
+    {nome:"Petisco 2", preco:6, estoque:10, img:"img/p2.png"},
+    {nome:"Petisco 3", preco:7, estoque:10, img:"img/p3.png"},
+    {nome:"Petisco 4", preco:8, estoque:10, img:"img/p4.png"},
+    {nome:"Petisco 5", preco:9, estoque:10, img:"img/p5.png"},
+    {nome:"Petisco 6", preco:10, estoque:10, img:"img/p6.png"},
+    {nome:"Petisco 7", preco:11, estoque:10, img:"img/p7.png"},
+    {nome:"Petisco 8", preco:12, estoque:10, img:"img/p8.png"},
+    {nome:"Petisco 9", preco:13, estoque:10, img:"img/p9.png"},
+    {nome:"Petisco 10", preco:14, estoque:10, img:"img/p10.png"},
+    {nome:"Petisco 11", preco:15, estoque:10, img:"img/p11.png"},
+    {nome:"Petisco 12", preco:16, estoque:10, img:"img/p12.png"},
+    {nome:"Petisco 13", preco:17, estoque:10, img:"img/p13.png"},
+    {nome:"Petisco 14", preco:18, estoque:10, img:"img/p14.png"},
+    {nome:"Petisco 15", preco:19, estoque:10, img:"img/p15.png"},
+    {nome:"Petisco 16", preco:20, estoque:10, img:"img/p16.png"},
+    {nome:"Petisco 17", preco:21, estoque:10, img:"img/p17.png"},
+    {nome:"Petisco 18", preco:22, estoque:10, img:"img/p18.png"},
+    {nome:"Petisco 19", preco:23, estoque:10, img:"img/p19.png"},
+    {nome:"Petisco 20", preco:24, estoque:10, img:"img/p20.png"}
+  ]
+};
 
 let estoqueSalvo = localStorage.getItem("estoqueProdutos");
 
 if(estoqueSalvo){
-  produtos = JSON.parse(estoqueSalvo);
-}
+  try{
+    let dados = JSON.parse(estoqueSalvo);
 
+    // 🔥 só atualiza estoque, não nome/preço
+    Object.keys(categorias).forEach(cat=>{
+      categorias[cat].forEach((produto, i)=>{
+        if(dados[cat] && dados[cat][i]){
+          produto.estoque = dados[cat][i].estoque;
+        }
+      });
+    });
+
+  }catch(e){
+    localStorage.removeItem("estoqueProdutos");
+  }
+}
 let carrinho=[];
 
 /* CPF máscara */
@@ -234,33 +290,47 @@ document.getElementById("boxTroco").style.display=p==="Dinheiro"?"block":"none";
 /* FRETE */
 function calcularTotal(){
 let subtotal=0;
-carrinho.forEach(i=>{
-let p=produtos[i.index];
-subtotal+=p.preco*i.qtd;
+
+carrinho.forEach(item=>{
+let p = categorias[item.cat][item.index];
+subtotal += p.preco * item.qtd;
 });
+
 let frete=0,msg="";
+
 if(subtotal < 30){
   msg = "Pedido mínimo R$30";
   frete = 0;
-}else if(subtotal >= 30 && subtotal < 50){
+}else if(subtotal < 50){
   frete = 3;
   msg = "Taxa: R$ 3,00";
 }else{
   frete = 0;
-  msg = " Taxa grátis";
+  msg = "Taxa grátis";
 }
-return{subtotal,frete,total:subtotal+frete,msg};
+
+return {subtotal,frete,total:subtotal+frete,msg};
 }
 
 /* CARRINHO */
 function addCarrinho(i){
-let p=produtos[i];
+let lista = categorias[categoriaAtual];
+let p = lista[i];
+
 if(p.estoque<=0){alert("Sem estoque!");return;}
-let item=carrinho.find(x=>x.index===i);
-if(item){item.qtd++;}else{carrinho.push({index:i,qtd:1});}
+
+let item=carrinho.find(x=>x.index===i && x.cat===categoriaAtual);
+
+if(item){
+  item.qtd++;
+}else{
+  carrinho.push({index:i,qtd:1,cat:categoriaAtual});
+}
+
 renderProdutos();
 atualizar();
 }
+
 
 function atualizar(){
 let lista=document.getElementById("lista");
@@ -269,7 +339,8 @@ let count=0;
 lista.innerHTML="";
 
 carrinho.forEach((item,i)=>{
-let p=produtos[item.index];
+let p = categorias[item.cat][item.index];
+
 count+=item.qtd;
 
 lista.innerHTML+=`
@@ -288,17 +359,24 @@ document.getElementById("count").innerText=count;
 }
 
 function mais(i){
-let p=produtos[carrinho[i].index];
+let item = carrinho[i];
+let p = categorias[item.cat][item.index];
+
 if(p.estoque<=0){alert("Sem estoque!");return;}
-carrinho[i].qtd++;
+
+item.qtd++;
+
 renderProdutos();
 atualizar();
 }
 
 function menos(i){
-let p=produtos[carrinho[i].index];
 carrinho[i].qtd--;
-if(carrinho[i].qtd<=0)carrinho.splice(i,1);
+
+if(carrinho[i].qtd<=0){
+  carrinho.splice(i,1);
+}
+
 renderProdutos();
 atualizar();
 }
@@ -307,18 +385,20 @@ function nomeInput(id){
 }
 
 function salvarEstoque(){
-  localStorage.setItem("estoqueProdutos", JSON.stringify(produtos));
+  localStorage.setItem("estoqueProdutos", JSON.stringify(categorias));
 }
 
 function baixarEstoque(){
-  carrinho.forEach(item=>{
-    let p = produtos[item.index];
-    p.estoque -= item.qtd;
+carrinho.forEach(item=>{
+let p = categorias[item.cat][item.index];
 
-    if(p.estoque < 0){
-      p.estoque = 0;
-    }
-  });
+p.estoque -= item.qtd;
+
+if(p.estoque < 0){
+  p.estoque = 0;
+}
+});
+
 
   salvarEstoque(); // 🔥 ESSA LINHA É A IMPORTANTE
 }
@@ -345,7 +425,7 @@ if(!semCpf && !validarCPF(cpf)){alert("CPF inválido");return;}
 let msg="🛒 *NOVO PEDIDO*\n\n";
 
 carrinho.forEach(i=>{
-let p=produtos[i.index];
+let p = categorias[i.cat][i.index];
 msg+=`• ${p.nome}\nQtd: ${i.qtd}\nValor: R$ ${p.preco.toFixed(2).replace('.',',')}\n\n`;
 });
 
@@ -368,7 +448,7 @@ renderProdutos();
 carrinho = [];
 atualizar();
 
-window.open("https://wa.me/5521966388515?text="+encodeURIComponent(msg));
+window.open("https://wa.me/5521971724498?text="+encodeURIComponent(msg));
 }
 /* CONTROLE SCROLL */
 /* CONTROLE SCROLL + HEADER */
@@ -396,7 +476,10 @@ function voltarHome(){
 function renderProdutos(){
 let div=document.getElementById("produtos");
 div.innerHTML="";
-produtos.forEach((p,i)=>{
+
+let lista = categorias[categoriaAtual];
+
+lista.forEach((p,i)=>{
 div.innerHTML+=`
 <div class="card">
 <img src="${p.img}">
