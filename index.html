@@ -7,6 +7,16 @@
 <title>O Bom Pet</title>
 
 <style>
+.info-local{
+  display:;
+  background:;
+  color:white;
+  font-weight:1000;
+  text-align:center;
+  padding:8px;
+  font-size:10px;
+  border-bottom:1px solid #333;
+}
 .card div:nth-child(4){
   display:flex;
   justify-content: center; /* 🔥 centraliza horizontal */
@@ -49,7 +59,7 @@ input[type="file"]{
 .categorias{
   display:flex;
   gap:10px;
-  padding:10px;
+  padding:3px;
   overflow:auto;
 }
 
@@ -61,7 +71,7 @@ input[type="file"]{
   font-weight:bold;
   white-space:nowrap;
   cursor:pointer;
-  box-shadow:0 4px 10px rgba(0,0,0,0.4);
+  box-shadow:0 4px 10px );
   transition:0.25s;
 }
 
@@ -79,15 +89,15 @@ input[type="file"]{
   margin-top:8px;
   border-radius:10px;
   overflow:hidden;
-  height:120px; /* 🔥 menor e mais elegante */
-  transition:0.3s;
+  height:110px; /* 🔥 menor e mais elegante */
+  transition:1s;
 }
 
 .carousel{
   display:flex;
   width:100%;
   height:100%;
-  transition:transform 0.6s ease;
+  transition:transform 1s ease;
 }
 
 .carousel img{
@@ -108,7 +118,7 @@ header.carrinho-aberto .btn-whatsapp{
   gap:10px;
   background:linear-gradient(135deg,#25d366,#128c7e);
   color:#fff;
-  padding:14px;
+  padding:5px;
   border-radius:12px;
   font-weight:bold;
   font-size:14px;
@@ -127,7 +137,7 @@ header.carrinho-aberto .btn-whatsapp{
 }
 
 .btn-whatsapp .icon{
-  font-size:18px;
+  font-size:12px;
 }
 *{box-sizing:border-box;}
 body{
@@ -277,7 +287,7 @@ color:yellow;
 font-weight: 1000;
 text-align:center;
 padding:10px;
-font-size:13px;
+font-size:10px;
 border-bottom:1px solid #333;
 }
 
@@ -420,10 +430,10 @@ header.carrinho-aberto .banner{
 /* 🔥 ESCONDER ELEMENTOS QUANDO ABRIR O CARRINHO */
 header.carrinho-aberto .btn-whatsapp,
 header.carrinho-aberto .info-entrega,
+header.carrinho-aberto .info-local,
 header.carrinho-aberto .categorias {
   display: none !important;
 }
-
 .overlay{
   position:fixed;
   top:0;
@@ -548,7 +558,11 @@ Produto adicionado!
     <img src="2.png">
   </div>
 </div>
-
+<div class="info-local" onclick="abrirMapa()">
+  📍Estamos aqui:Estrada dos Bandeirantes, 24310 - Vargem Grande-RJ. 
+ Horário de funcionamento segunda a sexta das 08:00h às 22:00
+ domingo e feriados das 08:00 às 18:00
+</div>
 <!-- INFO -->
 <div class="info-entrega">
 🚚 Entregas a partir de R$30 • Pedidos Acima de R$50,00 = TAXA GRÁTIS • Taxa R$3,00 Para Pedido Abaixo de R$50,00
@@ -1505,6 +1519,10 @@ function exportarPDF(){
 
 document.getElementById("overlay").onclick = function(){
   toggleCart();
+}
+
+function abrirMapa(){
+  window.open("https://www.google.com/maps/search/?api=1&query=Estr. dos Bandeirantes, 24310 - Vargem Grande, Rio de Janeiro - RJ, 22785-092");
 }
 </script>
 
