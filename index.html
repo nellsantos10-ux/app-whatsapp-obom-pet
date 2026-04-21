@@ -7,6 +7,10 @@
 <title>O Bom Pet</title>
 
 <style>
+#toast{
+  position: fixed;
+  z-index: 999999 !important; /* 🔥 MAIS ALTO AINDA */
+}
 .info-local{
   display:;
   background:;
@@ -522,9 +526,10 @@ padding:14px 22px;
 border-radius:12px;
 font-weight:bold;
 opacity:0;
+display:none; /* 🔥 ADICIONE ISSO */
 pointer-events:none;
 transition:0.4s;
-z-index:99999; /* 🔥 AQUI É A CHAVE */
+z-index:99999;
 box-shadow:0 6px 20px rgba(0,0,0,0.6);
 ">
 Produto adicionado!
@@ -1399,13 +1404,23 @@ function salvarProduto(cat, index){
 function mostrarToast(msg, cor="#4CAF50"){
   let toast = document.getElementById("toast");
 
+  // 🔥 força reset (resolve bug do Kodular)
+  toast.style.opacity = "0";
+  toast.style.display = "block";
+
+  // 🔥 força reflow (ESSENCIAL)
+  toast.offsetHeight;
+
   toast.innerText = msg;
   toast.style.background = cor;
   toast.style.opacity = "1";
-  toast.style.display = "block";
 
   setTimeout(()=>{
     toast.style.opacity = "0";
+
+    setTimeout(()=>{
+      toast.style.display = "none";
+    }, 400);
   }, 2000);
 }
 function salvarLogPedido(pedido){
