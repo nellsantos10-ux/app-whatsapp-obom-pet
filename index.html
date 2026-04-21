@@ -513,18 +513,19 @@ h3{
 
 <div id="toast" style="
 position:fixed;
-bottom:20px;
+bottom:30px;
 left:50%;
 transform:translateX(-50%);
 background:#4CAF50;
 color:#fff;
-padding:12px 20px;
-border-radius:10px;
+padding:14px 22px;
+border-radius:12px;
 font-weight:bold;
 opacity:0;
 pointer-events:none;
 transition:0.4s;
-z-index:3000;
+z-index:99999; /* 🔥 AQUI É A CHAVE */
+box-shadow:0 6px 20px rgba(0,0,0,0.6);
 ">
 Produto adicionado!
 </div>
@@ -560,12 +561,13 @@ Produto adicionado!
 </div>
 <div class="info-local" onclick="abrirMapa()">
   📍Estamos aqui:Estrada dos Bandeirantes, 24310 - Vargem Grande-RJ. 
- Horário de funcionamento segunda a sexta das 08:00h às 22:00
- domingo e feriados das 08:00 às 18:00
+ Horário de Funcionamento: Segunda a Sábado das 08:00 às 22:00,
+ Domingo e Feriádos das 08:00 às 18:00
 </div>
 <!-- INFO -->
 <div class="info-entrega">
-🚚 Entregas a partir de R$30 • Pedidos Acima de R$50,00 = TAXA GRÁTIS • Taxa R$3,00 Para Pedido Abaixo de R$50,00
+🚚 Entregas a partir de R$30 • Pedidos Acima de R$50,00 = TAXA GRÁTIS • Taxa R$3,00 Para Pedido Abaixo de R$50,00.
+Horario de Entregas: Segunda a Sábado de 08:00 às 21:00
 </div>
 
 <!-- BOTÃO WHATS -->
@@ -1400,12 +1402,12 @@ function mostrarToast(msg, cor="#4CAF50"){
   toast.innerText = msg;
   toast.style.background = cor;
   toast.style.opacity = "1";
+  toast.style.display = "block";
 
   setTimeout(()=>{
     toast.style.opacity = "0";
   }, 2000);
 }
-
 function salvarLogPedido(pedido){
   let logs = JSON.parse(localStorage.getItem("logsPedidos")) || [];
 
