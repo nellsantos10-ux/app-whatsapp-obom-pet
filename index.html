@@ -587,14 +587,14 @@ Horario de Entregas: Segunda a Sábado de 08:00 às 21:00
 
 <!-- CATEGORIAS -->
 <div class="categorias">
-  <div class="cat-btn" onclick="trocarCategoria('combos')">🐶 Nossos Combos</div>
-  <div class="cat-btn" onclick="trocarCategoria('racoes')">🐶 Rações</div>
-  <div class="cat-btn" onclick="trocarCategoria('gatos')">🐱 Gatos</div>
-  <div class="cat-btn" onclick="trocarCategoria('petiscos')">🦴 Petiscos</div>
-  <div class="cat-btn" onclick="trocarCategoria('gatos')">🐱 Gatos</div>
-  <div class="cat-btn" onclick="trocarCategoria('petiscos')">🦴 Petiscos</div>
-  <div class="cat-btn" onclick="trocarCategoria('gatos')">🐱 Gatos</div>
-  <div class="cat-btn" onclick="trocarCategoria('petiscos')">🦴 Petiscos</div>
+  <div class="cat-btn" onclick="trocarCategoria('combos')">Nossos Combos</div>
+  <div class="cat-btn" onclick="trocarCategoria('racoes_caes')">Rações Cães</div>
+  <div class="cat-btn" onclick="trocarCategoria('racoes_gatos')">Rações Gatos</div>
+  <div class="cat-btn" onclick="trocarCategoria('caesfilhotes')">Rações cães Filhotes</div>
+  <div class="cat-btn" onclick="trocarCategoria('caesadultos')">Rações Cães Adultos</div>
+  <div class="cat-btn" onclick="trocarCategoria('gatosfilhotes')">Rações Gatos Filhotes</div>
+  <div class="cat-btn" onclick="trocarCategoria('gatosadultos')">Rações Gatos Adulto</div>
+  <div class="cat-btn" onclick="trocarCategoria('petiscos')"> Petiscos</div>
 </div>
 
 </header>
@@ -768,7 +768,7 @@ function atendimentoWhats(){
   window.open("https://wa.me/5521971724498?text=" + encodeURIComponent(msg));
 }
 
-let categoriaAtual = "racoes";
+let categoriaAtual = "combos";
 
 function trocarCategoria(cat){
   categoriaAtual = cat;
@@ -776,11 +776,15 @@ function trocarCategoria(cat){
 }
 
 let categorias = {
+caesadultos: [
+    {nome:"Golden gatos castrados salmão 3kg", preco:64.90, estoque:16, img:"goldencastradosalmao.jpg"},
+    {nome:"Premier gatos sachê atum 85g", preco:8.99, estoque:120, img:"sachegato atum.jpg"},
+  ],
 combos: [
   { nome: "Golden gatos castrados salmão 3kg", preco: 64.90, estoque: 16, img: "goldencastradosalmao.jpg" },
   { nome: "Premier gatos sachê atum 85g", preco: 8.99, estoque: 120, img: "sachegato atum.jpg" },
 ],
-  racoes: [
+  racoes_caes: [
     {nome:"Golden special adulto frango e carne 15kg", preco:159.90, estoque:150, img:"Golden.jpg"},
     {nome:"Golden senior porte pequeno 3kg", preco:64.99, estoque:10, img:"goldensenior.jpg"},
     {nome:"Premier filhotes porte grande 15kg", preco:269.90, estoque:10, img:"premierfilhotes.jpg"},
@@ -803,7 +807,7 @@ combos: [
     {nome:"Ração 20", preco:48, estoque:10, img:"img/p20.png"}
   ],
 
-  gatos: [
+  racoes_gatos: [
     {nome:"Golden gatos castrados salmão 3kg", preco:64.90, estoque:16, img:"goldencastradosalmao.jpg"},
     {nome:"Premier gatos sachê atum 85g", preco:8.99, estoque:120, img:"sachegato atum.jpg"},
   ],
