@@ -3,9 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
 <title>O Bom Pet</title>
 
 <style>
+.card div:nth-child(4){
+  display:flex;
+  justify-content: center; /* 🔥 centraliza horizontal */
+  align-items: center;     /* 🔥 centraliza vertical (opcional) */
+  color: black;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  padding-bottom: 5px;
+}
+
+.card div:nth-child(2){
+  font-weight: bold;
+  text-align:center;
+  font-size:14.5px;
+   display: -webkit-box;
+  -webkit-line-clamp: 2; /* 🔥 limita em 2 linhas */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  min-height: 42px; /* mantém padrão bonito */
+}
+/* descrição em negrito */
+
+.card div:nth-child(3){
+  color: #2196F3; /* azul bonito */
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
 
 input[type="file"]{
   background:#2a2a2a;
@@ -44,6 +75,7 @@ input[type="file"]{
 }
 
 .banner{
+  display:;
   margin-top:8px;
   border-radius:10px;
   overflow:hidden;
@@ -98,7 +130,49 @@ header.carrinho-aberto .btn-whatsapp{
   font-size:18px;
 }
 *{box-sizing:border-box;}
-body{margin:0;font-family:Arial;background:#121212;color:#fff;}
+body{
+  margin:0;
+  font-family:Arial;
+  color:#fff;
+  overflow-x:hidden;
+
+  background: linear-gradient(135deg, #e0e0e0, #cfcfcf);
+
+  /* FORMAS GRANDES SUAVES */
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(255,255,255,0.8) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(0,0,0,0.06) 0%, transparent 60%),
+    radial-gradient(circle at 50% 90%, rgba(255,255,255,0.6) 0%, transparent 50%),
+    radial-gradient(circle at 10% 70%, rgba(0,0,0,0.05) 0%, transparent 50%);
+
+  background-blend-mode: soft-light;
+}
+
+body::before,
+body::after{
+  content:"";
+  position:fixed;
+  width:500px;
+  height:500px;
+  border-radius:50%;
+  z-index:-1;
+}
+
+/* círculo claro */
+body::before{
+  top:-150px;
+  left:-150px;
+  background:rgba(255,255,255,0.6);
+  filter:blur(80px);
+}
+
+/* círculo escuro */
+body::after{
+  bottom:-150px;
+  right:-150px;
+  background:rgba(0,0,0,0.08);
+  filter:blur(100px);
+}
 header{
   background:#1c1c1c;
   padding:10px;
@@ -114,10 +188,11 @@ header{
 }
 
 .top-bar h3 {
+  font-family: 'Anton', sans-serif;
   flex: 1;
   text-align: center;
   margin: 0;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: bold;
   color: #fff;
   
@@ -198,25 +273,59 @@ header{
 
 .info-entrega{
 background:#1f1f1f;
-color:#ff4d4d;
+color:yellow;
+font-weight: 1000;
 text-align:center;
 padding:10px;
 font-size:13px;
 border-bottom:1px solid #333;
 }
 
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:10px;}
-.card{background:#1e1e1e;border-radius:15px;padding:10px;}
-.card img{width:100%;height:120px;object-fit:contain;background:#fff;border-radius:10px;}
-.btn{background:#e53935;padding:10px;text-align:center;border-radius:10px;margin-top:10px;}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  padding:10px;
+  align-items:stretch;
+}
+.card{
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(10px);
+  color:#333;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+
+  height:100%;
+  border-radius:12px;
+  padding:10px;
+}
+.card img{
+  width:100%;
+  height:140px;
+  object-fit:contain;
+  background:#fff;
+  border-radius:10px;
+}
+.btn{
+  background:#e53935;
+  color: #fff;
+  font-weight: 1000;
+  padding:10px;
+  text-align:center;
+  border-radius:10px;
+  margin-top:auto;
+}
 .cart{
   position:fixed;
   top:0;
   width:100%;
   height:100vh;
-  background:#181818;
+
+  background:#f5f5f5; /* 🔥 fundo sólido */
+
   display:none;
-  border-radius:20px 20px 0 0;
   flex-direction:column;
   z-index:999;
 }
@@ -227,11 +336,70 @@ border-bottom:1px solid #333;
   flex:1;
   padding-bottom:100px; /* botão finalizar */
 }
-.input-group{margin-top:10px;}
-.input-group input,.input-group select{width:100%;padding:14px;border-radius:12px;border:none;background:#2a2a2a;color:#fff;}
+.input-group input,
+.input-group select{
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:none;
+
+  background:#ffffff;   /* 🔥 fundo branco */
+  color:#000;           /* 🔥 texto preto */
+
+  font-weight:500;
+  box-shadow:0 2px 6px rgba(0,0,0,0.2);
+}
 .checkbox{display:flex;align-items:center;gap:8px;margin-top:10px;}
 .item{display:flex;justify-content:space-between;margin-bottom:10px;align-items:center;}
-.qtd button{background:#e53935;border:none;color:#fff;padding:5px 10px;border-radius:5px;}
+.qtd{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+/* BOTÕES MAIS E MENOS */
+.qtd button{
+  width:38px;
+  height:38px;
+  border:none;
+  border-radius:10px;
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:linear-gradient(135deg,#ff4d4d,#e53935);
+  color:#fff;
+
+  box-shadow:0 4px 10px rgba(0,0,0,0.4);
+  transition:0.2s;
+}
+
+/* HOVER */
+.qtd button:hover{
+  transform:scale(1.1);
+}
+
+/* CLICK */
+.qtd button:active{
+  transform:scale(0.9);
+}
+
+/* BOTÃO MENOS DIFERENTE */
+.qtd button:first-child{
+  background:linear-gradient(135deg,#555,#333);
+}
+
+/* QUANTIDADE NO MEIO */
+.qtd span{
+  min-width:28px;
+  text-align:center;
+  font-weight:bold;
+  color:#000;
+}
 .finalizar{
   background:#e53935;
   padding:15px;
@@ -256,9 +424,78 @@ header.carrinho-aberto .categorias {
   display: none !important;
 }
 
+.overlay{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.6); /* ESCURECE O FUNDO */
+  backdrop-filter: blur(3px); /* efeito vidro 🔥 */
+  z-index:998;
+  display:none;
+}
 
+h3{
+  color:#222;
+}
 
+.checkbox label{
+  color:#222;
+  font-weight:500;
+}
 
+/*nova css*/
+/* 🔥 MELHORIAS VISUAIS DO CARRINHO */
+
+/* Texto do pedido mais visível */
+.item div{
+  color:#000;
+  font-weight:bold;
+}
+
+/* Total e frete */
+#total, #freteInfo{
+  color:#000;
+  font-weight:bold;
+}
+
+/* Inputs maiores e mais bonitos */
+.input-group input,
+.input-group select{
+  width:100%;
+  padding:18px;
+  border-radius:14px;
+  border:2px solid #ddd;
+
+  background:#fff;
+  color:#000;
+
+  font-size:16px;
+  font-weight:bold;
+
+  box-shadow:0 3px 8px rgba(0,0,0,0.2);
+}
+
+/* Checkbox maior */
+.checkbox input{
+  width:20px;
+  height:20px;
+  cursor:pointer;
+}
+
+/* Texto do checkbox */
+.checkbox label{
+  font-size:15px;
+  font-weight:bold;
+  color:#000;
+}
+
+/* Títulos */
+h3{
+  color:#000;
+  font-weight:bold;
+}
 </style>
 </head>
 
@@ -291,7 +528,7 @@ Produto adicionado!
     </svg>
   </div>
 
-  <h3>O Bom Pet</h3>
+  <h3>OBom Pet</h3>
 
   <div class="cart-btn" onclick="toggleCart()">
     <svg viewBox="0 0 24 24" fill="none">
@@ -344,7 +581,7 @@ Produto adicionado!
 </header>
 
 <div class="grid" id="produtos"></div>
-
+<div id="overlay" class="overlay"></div>
 <div class="cart" id="cart">
 <div class="cart-content">
 
@@ -696,20 +933,24 @@ function addCarrinho(i){
 let lista = categorias[categoriaAtual];
 let p = lista[i];
 
-if(p.estoque<=0){alert("Sem estoque!");return;}
+if(p.estoque<=0){
+  mostrarToast("Sem estoque ❌", "#f44336");
+  return;
+}
 
 let item=carrinho.find(x=>x.index===i && x.cat===categoriaAtual);
 
 if(item){
   item.qtd++;
+  mostrarToast("Quantidade atualizada 🔄", "#2196F3");
 }else{
   carrinho.push({index:i,qtd:1,cat:categoriaAtual});
+  mostrarToast("Produto adicionado ✅");
 }
 
 renderProdutos();
 atualizar();
 }
-
 
 function atualizar(){
 let lista=document.getElementById("lista");
@@ -726,8 +967,9 @@ lista.innerHTML+=`
 <div class="item">
 <div>${p.nome}<br>R$ ${p.preco.toFixed(2)} x ${item.qtd}</div>
 <div class="qtd">
-<button onclick="menos(${i})">-</button>
-<button onclick="mais(${i})">+</button>
+  <button onclick="menos(${i})">−</button>
+  <span>${item.qtd}</span>
+  <button onclick="mais(${i})">+</button>
 </div>
 </div>`;
 });
@@ -834,22 +1076,30 @@ window.open("https://wa.me/5521971724498?text="+encodeURIComponent(msg));
 function toggleCart(){
   let c = document.getElementById("cart");
   let header = document.querySelector("header");
+  let overlay = document.getElementById("overlay");
 
   if(c.style.display === "flex"){
     c.style.display = "none";
+    overlay.style.display = "none";
+
     header.classList.remove("carrinho-aberto");
-    document.body.style.overflow = "auto"; // libera scroll
+    document.body.style.overflow = "auto";
   }else{
     c.style.display = "flex";
+    overlay.style.display = "block";
+
     header.classList.add("carrinho-aberto");
-    document.body.style.overflow = "hidden"; // trava scroll
+    document.body.style.overflow = "hidden";
   }
 }
-
 function voltarHome(){
   document.getElementById("cart").style.display = "none";
+
+  // 🔥 ESSA LINHA FALTAVA
+  document.getElementById("overlay").style.display = "none";
+
   document.querySelector("header").classList.remove("carrinho-aberto");
-  document.body.style.overflow = "auto"; // libera scroll
+  document.body.style.overflow = "auto";
 }
 
 function renderProdutos(){
@@ -1251,6 +1501,10 @@ function exportarPDF(){
 
   janela.document.close();
   janela.print();
+}
+
+document.getElementById("overlay").onclick = function(){
+  toggleCart();
 }
 </script>
 
